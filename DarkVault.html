@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.5">
+  <title>DarkVault • Login & Account</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 10%, #1a0e1c, #0b0410);
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    /* main card – dark theme with pink/maroon/black/blue/red accents */
+    .app-container {
+      max-width: 520px;
+      width: 100%;
+      background: rgba(10, 4, 15, 0.9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(180, 70, 110, 0.35);
+      box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(220, 40, 80, 0.3), 0 0 30px rgba(180, 40, 90, 0.5);
+      border-radius: 2.5rem;
+      padding: 2.2rem 2rem;
+      color: #f0e6f6;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 2.1rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f472b6, #c2416c, #fb7185);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-left: 4px solid #db2777;
+      padding-left: 1rem;
+    }
+
+    .subtitle {
+      color: #cba6c7;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .theme-badge {
+      background: #2d132c;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #f9a8d4;
+      border: 1px solid #be185d;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.3rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #e9b5d2;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    input {
+      background: #1f1023;
+      border: 1px solid #701a3e;
+      border-radius: 1.2rem;
+      padding: 0.9rem 1.2rem;
+      font-size: 1rem;
+      color: #f5e6f0;
+      outline: none;
+      transition: 0.25s;
+      caret-color: #f472b6;
+      background: rgba(20, 5, 18, 0.8);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    input:focus {
+      border-color: #f87171;
+      box-shadow: 0 0 18px #be123c80, inset 0 1px 6px black;
+      background: #1e0c1a;
+    }
+
+    .captcha-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      background: #1e0c1b;
+      border-radius: 1.2rem;
+      padding: 0.7rem 1rem;
+      border: 1px solid #9d174d;
+    }
+
+    .captcha-text {
+      font-weight: 800;
+      font-size: 1.7rem;
+      letter-spacing: 3px;
+      background: #2e0a22;
+      padding: 0.3rem 1rem;
+      border-radius: 1rem;
+      color: #fda4af;
+      text-shadow: 0 0 8px #e11d48;
+      font-family: monospace;
+      user-select: none;
+      background: linear-gradient(145deg, #2c0e24, #180714);
+      border: 1px dashed #f43f5e;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .refresh-captcha {
+      background: #831843;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 2rem;
+      padding: 0.5rem 1.1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+      background: linear-gradient(145deg, #9f1239, #4c0519);
+      border: 1px solid #fb7185;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .refresh-captcha:hover {
+      background: #be123c;
+      border-color: #fda4af;
+      box-shadow: 0 0 15px #e11d48;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 0.8rem;
+    }
+
+    .btn {
+      background: #2d1024;
+      border: 1px solid #b91c4c;
+      padding: 0.9rem 1.6rem;
+      border-radius: 2.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fce7f3;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: linear-gradient(135deg, #4a1530, #2b0a1e);
+      flex: 1 1 auto;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      box-shadow: 0 6px 16px rgba(190, 24, 93, 0.4);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #be185d, #831843);
+      border-color: #f472b6;
+      color: white;
+      box-shadow: 0 0 22px #db2777;
+      font-weight: 800;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #9d174d;
+      color: #fbcfe8;
+    }
+
+    .btn:hover {
+      filter: brightness(1.2);
+      border-color: #f9a8d4;
+      box-shadow: 0 0 24px #e11d48;
+      transform: scale(1.02);
+    }
+
+    .data-panel {
+      background: #11040f;
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      border: 1px solid #b91c4c;
+      background: rgba(15, 2, 12, 0.8);
+      margin-top: 0.4rem;
+    }
+
+    .saved-entry {
+      background: #1f0a1a;
+      border-radius: 1rem;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.7rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 5px solid #db2777;
+      color: #f5d0e7;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .error-message {
+      color: #fb7185;
+      font-size: 0.8rem;
+      margin-top: 0.2rem;
+      font-weight: 500;
+    }
+
+    .success-badge {
+      color: #f9a8d4;
+      background: #4a1530;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+    }
+
+    hr {
+      border-color: #9d174d;
+      margin: 1rem 0 0.5rem;
+      opacity: 0.5;
+    }
+
+    .user-greeting {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container" id="appContainer">
+    <!-- dynamic sections will be rendered via JavaScript -->
+  </div>
+
+  <script>
+    (function() {
+      // ---------- STORAGE ----------
+      const STORAGE_KEY = 'darkvault_users';
+
+      // Simple in-memory & localStorage handling
+      function getUsersFromStorage() {
+        try {
+          const data = localStorage.getItem(STORAGE_KEY);
+          return data ? JSON.parse(data) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveUsersToStorage(users) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      }
+
+      // ---------- APP STATE ----------
+      const AppState = {
+        currentUser: null,        // { username, email, password }
+        users: getUsersFromStorage(),
+        captchaCode: '',
+        view: 'login'            // 'login' | 'create' | 'dashboard'
+      };
+
+      // ---------- CAPTCHA GENERATOR ----------
+      function generateCaptcha() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ123456789';
+        let code = '';
+        for (let i = 0; i < 5; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        AppState.captchaCode = code;
+        return code;
+      }
+
+      // ---------- RENDER UI ----------
+      const appEl = document.getElementById('appContainer');
+
+      function renderApp() {
+        if (!appEl) return;
+        
+        const { currentUser, view, captchaCode } = AppState;
+        
+        // If user logged in -> dashboard
+        if (currentUser) {
+          renderDashboard();
+          return;
+        }
+
+        // Otherwise show login or create account based on view
+        if (view === 'create') {
+          renderCreateAccount();
+        } else {
+          renderLogin();
+        }
+      }
+
+      // Helper to escape HTML
+      function escapeHtml(text) {
+        return String(text).replace(/[&<>"]/g, function(m) {
+          if (m === '&') return '&amp;';
+          if (m === '<') return '&lt;';
+          if (m === '>') return '&gt;';
+          if (m === '"') return '&quot;';
+          return m;
+        });
+      }
+
+      // ---------- LOGIN VIEW ----------
+      function renderLogin() {
+        const captcha = generateCaptcha();
+        const html = `
+          <h2>🔐 DarkVault</h2>
+          <div class="subtitle">
+            <span>✨ Login to continue</span>
+            <span class="theme-badge">pink·maroon·black</span>
+          </div>
+          
+          <div id="loginError" class="error-message" style="min-height:1.4rem;"></div>
+          
+          <div class="form-group">
+            <label>👤 Username or Email</label>
+            <input type="text" id="loginIdentifier" placeholder="you@dark.com" autocomplete="off">
+          </div>
+          
+          <div class="form-group">
+            <label>🔑 Password</label>
+            <input type="password" id="loginPassword" placeholder="········">
+          </div>
+          
+          <div class="captcha-row">
+            <span class="captcha-text" id="captchaDisplay">${escapeHtml(captcha)}</span>
+            <button class="refresh-captcha" id="refreshCaptchaBtn">🔄 New</button>
+            <input type="text" id="captchaInput" placeholder="Enter code" style="flex:1; min-width:100px; margin-left:0.3rem;" maxlength="6">
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-primary" id="loginSubmitBtn">🚪 Login</button>
+            <button class="btn btn-outline" id="goToCreateBtn">✨ Create Account</button>
+          </div>
+          <div style="font-size:0.75rem; color:#c08497; margin-top:0.6rem; text-align:center;">
+            🔒 captcha required • dark encrypted
+          </div>
+        `;
+        
+        appEl.innerHTML = html;
+        
+        // Attach events
+        document.getElementById('refreshCaptchaBtn')?.addEventListener('click', (e) => {
+          const newCaptcha = generateCaptcha();
+          const display = document.getElementById('captchaDisplay');
+          if (display) display.textContent = newCaptcha;
+        });
+        
+        document.getElementById('loginSubmitBtn')?.addEventListener('click', handleLogin);
+        document.getElementById('goToCreateBtn')?.addEventListener('click', () => {
+          AppState.view = 'create';
+          renderApp();
+        });
+        
+        // allow enter key on password or captcha
+        document.getElementById('captchaInput')?.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleLogin();
+        });
+        document.getElementById('loginPassword')?.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleLogin();
+        });
+      }
+
+      function handleLogin() {
+        const identifier = document.getElementById('loginIdentifier')?.value.trim();
+        const password = document.getElementById('loginPassword')?.value;
+        const captchaInput = document.getElementById('captchaInput')?.value.trim();
+        const errorEl = document.getElementById('loginError');
+        
+        // clear previous error
+        if (errorEl) errorEl.textContent = '';
+        
+        if (!identifier || !password) {
+          if (errorEl) errorEl.textContent = '❌ Please enter username/email and password.';
+          return;
+        }
+        if (!captchaInput) {
+          if (errorEl) errorEl.textContent = '❌ Captcha code is required.';
+          return;
+        }
+        if (captchaInput.toUpperCase() !== AppState.captchaCode.toUpperCase()) {
+          if (errorEl) errorEl.textContent = '❌ Invalid captcha. Try again.';
+          // refresh captcha after wrong attempt
+          const newCaptcha = generateCaptcha();
+          const display = document.getElementById('captchaDisplay');
+          if (display) display.textContent = newCaptcha;
+          return;
+        }
+        
+        // search user by username or email
+        const users = getUsersFromStorage();
+        const foundUser = users.find(u => 
+          (u.username.toLowerCase() === identifier.toLowerCase() || 
+           u.email.toLowerCase() === identifier.toLowerCase()) && 
+          u.password === password
+        );
+        
+        if (!foundUser) {
+          if (errorEl) errorEl.textContent = '❌ Invalid credentials. Check username/email & password.';
+          // refresh captcha
+          const newCaptcha = generateCaptcha();
+          const display = document.getElementById('captchaDisplay');
+          if (display) display.textContent = newCaptcha;
+          return;
+        }
+        
+        // success login
+        AppState.currentUser = foundUser;
+        AppState.view = 'dashboard';
+        renderApp();
+      }
+
+      // ---------- CREATE ACCOUNT VIEW ----------
+      function renderCreateAccount() {
+        const captcha = generateCaptcha();
+        const html = `
+          <h2>🖤 Join DarkVault</h2>
+          <div class="subtitle">
+            <span>Create encrypted identity</span>
+            <span class="theme-badge">red·blue·pink</span>
+          </div>
+          <div id="createError" class="error-message" style="min-height:1.4rem;"></div>
+          
+          <div class="form-group">
+            <label>👤 Username</label>
+            <input type="text" id="newUsername" placeholder="shadow_user" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>📧 Email</label>
+            <input type="email" id="newEmail" placeholder="dark@vault.com">
+          </div>
+          <div class="form-group">
+            <label>🔐 Password</label>
+            <input type="password" id="newPassword" placeholder="At least 4 chars">
+          </div>
+          
+          <div class="captcha-row">
+            <span class="captcha-text" id="createCaptchaDisplay">${escapeHtml(captcha)}</span>
+            <button class="refresh-captcha" id="refreshCreateCaptcha">🔄 New</button>
+            <input type="text" id="createCaptchaInput" placeholder="Code" style="flex:1; min-width:90px; margin-left:0.3rem;" maxlength="6">
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-primary" id="createAccountBtn">🔏 Register</button>
+            <button class="btn btn-outline" id="backToLoginBtn">← Back to Login</button>
+          </div>
+        `;
+        
+        appEl.innerHTML = html;
+        
+        document.getElementById('refreshCreateCaptcha')?.addEventListener('click', () => {
+          const newCaptcha = generateCaptcha();
+          document.getElementById('createCaptchaDisplay').textContent = newCaptcha;
+        });
+        
+        document.getElementById('createAccountBtn')?.addEventListener('click', handleCreateAccount);
+        document.getElementById('backToLoginBtn')?.addEventListener('click', () => {
+          AppState.view = 'login';
+          renderApp();
+        });
+        
+        document.getElementById('createCaptchaInput')?.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleCreateAccount();
+        });
+      }
+
+      function handleCreateAccount() {
+        const username = document.getElementById('newUsername')?.value.trim();
+        const email = document.getElementById('newEmail')?.value.trim();
+        const password = document.getElementById('newPassword')?.value;
+        const captchaInput = document.getElementById('createCaptchaInput')?.value.trim();
+        const errorEl = document.getElementById('createError');
+        if (errorEl) errorEl.textContent = '';
+        
+        if (!username || !email || !password) {
+          if (errorEl) errorEl.textContent = '❌ All fields are required.';
+          return;
+        }
+        if (password.length < 4) {
+          if (errorEl) errorEl.textContent = '❌ Password must be at least 4 characters.';
+          return;
+        }
+        if (!captchaInput) {
+          if (errorEl) errorEl.textContent = '❌ Captcha required.';
+          return;
+        }
+        if (captchaInput.toUpperCase() !== AppState.captchaCode.toUpperCase()) {
+          if (errorEl) errorEl.textContent = '❌ Wrong captcha.';
+          const newCaptcha = generateCaptcha();
+          document.getElementById('createCaptchaDisplay').textContent = newCaptcha;
+          return;
+        }
+        
+        const users = getUsersFromStorage();
+        const exists = users.some(u => 
+          u.username.toLowerCase() === username.toLowerCase() || 
+          u.email.toLowerCase() === email.toLowerCase()
+        );
+        if (exists) {
+          if (errorEl) errorEl.textContent = '❌ Username or email already exists.';
+          return;
+        }
+        
+        const newUser = { username, email, password };
+        users.push(newUser);
+        saveUsersToStorage(users);
+        AppState.users = users;
+        
+        // auto login after creation? better redirect to login with success message.
+        AppState.view = 'login';
+        // We'll store a temporary message? We'll just render login and show a subtle note.
+        renderApp();
+        // small hack: set a success note after render
+        setTimeout(() => {
+          const loginErrorEl = document.getElementById('loginError');
+          if (loginErrorEl) {
+            loginErrorEl.style.color = '#f9a8d4';
+            loginErrorEl.textContent = '✅ Account created! You can login now.';
+          }
+        }, 10);
+      }
+
+      // ---------- DASHBOARD (SAVED DATA VIEW) ----------
+      function renderDashboard() {
+        const user = AppState.currentUser;
+        if (!user) {
+          AppState.view = 'login';
+          renderApp();
+          return;
+        }
+        
+        const users = getUsersFromStorage();
+        // find latest version of current user? (in case data changed elsewhere) 
+        const refreshedUser = users.find(u => u.username === user.username && u.email === user.email) || user;
+        AppState.currentUser = refreshedUser;
+        
+        const html = `
+          <h2>💾 Vault Access</h2>
+          <div class="subtitle">
+            <span class="user-greeting">👑 ${escapeHtml(refreshedUser.username)}</span>
+            <span class="theme-badge">blue·red·maroon</span>
+          </div>
+          
+          <div class="data-panel" id="savedDataContainer">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="color:#f472b6;">📋 Your saved credentials</strong>
+              <span style="color:#c08497; font-size:0.8rem;">encrypted locally</span>
+            </div>
+            <hr>
+            <div id="userDataEntries">
+              ${renderUserDataEntries(refreshedUser)}
+            </div>
+          </div>
+          
+          <div class="btn-group" style="margin-top:1rem;">
+            <button class="btn btn-outline" id="logoutBtn">🚪 Logout</button>
+            <button class="btn btn-primary" id="deleteAccountBtn" style="background:#7f1d1d; border-color:#b91c1c;">⚠️ Delete Account</button>
+          </div>
+          <div style="font-size:0.7rem; color:#9d6b8a; margin-top:0.5rem; text-align:center;">
+            🔐 pink·black·maroon·blue·red theme
+          </div>
+        `;
+        
+        appEl.innerHTML = html;
+        
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+          AppState.currentUser = null;
+          AppState.view = 'login';
+          renderApp();
+        });
+        
+        document.getElementById('deleteAccountBtn')?.addEventListener('click', () => {
+          if (confirm('Permanently delete your account and all data? This cannot be undone.')) {
+            deleteCurrentAccount();
+          }
+        });
+      }
+
+      function renderUserDataEntries(user) {
+        if (!user) return '<p style="color:#cda4b8;">No data.</p>';
+        return `
+          <div class="saved-entry">
+            <span>👤 <strong>Username</strong></span>
+            <span>${escapeHtml(user.username)}</span>
+          </div>
+          <div class="saved-entry">
+            <span>📧 <strong>Email</strong></span>
+            <span>${escapeHtml(user.email)}</span>
+          </div>
+          <div class="saved-entry">
+            <span>🔑 <strong>Password</strong></span>
+            <span>${escapeHtml(user.password)}</span>
+          </div>
+          <div style="margin-top:0.8rem; color:#f1b8d0; font-size:0.8rem; display:flex; gap:0.5rem; align-items:center;">
+            <span>🕒 Created locally</span>
+            <span class="success-badge">active</span>
+          </div>
+        `;
+      }
+
+      function deleteCurrentAccount() {
+        const user = AppState.currentUser;
+        if (!user) return;
+        let users = getUsersFromStorage();
+        users = users.filter(u => !(u.username === user.username && u.email === user.email));
+        saveUsersToStorage(users);
+        AppState.users = users;
+        AppState.currentUser = null;
+        AppState.view = 'login';
+        renderApp();
+        setTimeout(() => {
+          const errorEl = document.getElementById('loginError');
+          if (errorEl) {
+            errorEl.style.color = '#f9a8d4';
+            errorEl.textContent = '🗑️ Account deleted permanently.';
+          }
+        }, 10);
+      }
+
+      // initial render
+      renderApp();
+
+      // Optional: sync users on storage change from other tabs (basic)
+      window.addEventListener('storage', (e) => {
+        if (e.key === STORAGE_KEY) {
+          AppState.users = getUsersFromStorage();
+          // If current user no longer exists, force logout
+          if (AppState.currentUser) {
+            const stillExists = AppState.users.some(u => 
+              u.username === AppState.currentUser.username && 
+              u.email === AppState.currentUser.email
+            );
+            if (!stillExists) {
+              AppState.currentUser = null;
+              AppState.view = 'login';
+            }
+          }
+          renderApp();
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
